@@ -62,6 +62,8 @@ def ispisi_izbornik():
     print ("1. Unos nove učenice")
     print ("2. Unos ocjena za učenicu")
     print ("3. Ispis podataka o učenici")
+    print ('4. Spremanje podataka')
+    print ('5. učitavanje podataka')
     print ("-"*50)
 
 def upisUcenice(ime, prezime, razred):
@@ -85,7 +87,7 @@ while True:
     ispisi_izbornik()
     try:
         # 2. Pitamo korisnika za odabir
-        izbor = int(input("Unesite izbor (0/1/2/3): "))
+        izbor = int(input("Unesite izbor (0/1/2/3/4/5): "))
         
         if izbor == 1:
             # 1. Unos nove učenice
@@ -129,6 +131,12 @@ while True:
                 else:
                     print ("Učenik nije pronađen.") # Ova poruka će se ispisati za svakog tko NIJE traženi
 
+        elif izbor == 4:
+            podaciSpremi_csv('ime', 'prezime', 'razred', 'PodaciUčenika')
+
+        elif izbor == 5:
+            podaciUčitaj_csv(PodaciUčenika=ucitani_ucenici)
+
         elif izbor == 0:
             # 0. Izlaz
             print ("Hvala na korištenju programa.")
@@ -145,7 +153,19 @@ while True:
             polja = ['ime', 'prezime', 'razred']
             writer = csv.DictWriter(datoteka, fieldnames=polja)
             writer.writeheader()
-            for p in lista_proizvoda:
-                writer.writerow({'ime': p.naziv, 'prezime': p.cijena, 'razred': p.razred})
+            for p in lista_ucenika:
+                writer.writerow({'ime': p.ime, 'prezime': p.prezime, 'razred': p.razred})
+        print(f'Spremljeno u {PodaciUčenika}')
+
+    def podaciUčitaj_csv(PodaciUčenika):
+        ucitani_Učenici = []
+        with open(PodaciUčenika, mode='r', encoding='utf-8') as datoteka:
+            reader = csv.DictReader(datoteka)
+            for red in reader:
+                p = ime(red['ime'], prezime(red['prezime']), razred(red['razred']))
+                ucitani_Učenici.append(p)
+        print(f"Učitano iz {PodaciUčenika}")
+        return ucitani_Učenici
+
 
 
